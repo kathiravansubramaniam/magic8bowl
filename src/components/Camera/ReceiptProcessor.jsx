@@ -14,11 +14,10 @@ export default function ReceiptProcessor({ file, processing, setProcessing, onRe
 
   const processReceiptImage = async () => {
     setProcessing(true)
-    setStatus('processing')
+    setStatus('Extracting text from receipt...')
     setProgress(10)
 
     try {
-      setStatus('Extracting text from receipt...')
       setProgress(30)
       
       const ocrResult = await processReceipt(file)
@@ -43,10 +42,11 @@ export default function ReceiptProcessor({ file, processing, setProcessing, onRe
               expiryDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString()
             }
           } catch (error) {
+            console.error('Image fetch failed for item:', item.name, error)
             return {
               ...item,
               id: Date.now() + index,
-              image: null,
+              image: `https://via.placeholder.com/150x150/e5e7eb/6b7280?text=${encodeURIComponent(item.name.slice(0, 8))}`,
               originalQuantity: item.quantity,
               expiryDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString()
             }
@@ -69,6 +69,7 @@ export default function ReceiptProcessor({ file, processing, setProcessing, onRe
     } catch (error) {
       console.error('Processing failed:', error)
       setStatus('error')
+      setProcessing(false)
     }
   }
 

@@ -34,9 +34,12 @@ export default function InventoryItem({ item }) {
       <div className="card p-3">
         <div className="relative">
           <img
-            src={item.image || '/api/placeholder/150/150'}
+            src={item.image || `https://via.placeholder.com/150x150/e5e7eb/6b7280?text=${encodeURIComponent(item.name.slice(0, 8))}`}
             alt={item.name}
             className="w-full h-32 object-cover rounded-lg mb-3"
+            onError={(e) => {
+              e.target.src = `https://via.placeholder.com/150x150/e5e7eb/6b7280?text=${encodeURIComponent(item.name.slice(0, 8))}`
+            }}
           />
           <button
             onClick={handleRemove}

@@ -1,22 +1,19 @@
 export async function fetchItemImage(itemName) {
   try {
-    const response = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(itemName + ' food grocery')}&per_page=1&client_id=demo`
-    )
+    // Use a placeholder image service that doesn't require API keys
+    const encodedName = encodeURIComponent(itemName.toLowerCase())
     
-    if (!response.ok) {
-      throw new Error('Image fetch failed')
-    }
+    // Try multiple fallback image sources
+    const imageSources = [
+      `https://via.placeholder.com/150x150/10b981/ffffff?text=${encodedName}`,
+      `https://picsum.photos/150/150?random=${Math.floor(Math.random() * 1000)}`,
+    ]
     
-    const data = await response.json()
+    // For now, return a consistent placeholder
+    return `https://via.placeholder.com/150x150/10b981/ffffff?text=${encodedName.slice(0, 10)}`
     
-    if (data.results && data.results.length > 0) {
-      return data.results[0].urls.small
-    }
-    
-    return null
   } catch (error) {
     console.warn('Image fetch failed for', itemName, error)
-    return null
+    return `https://via.placeholder.com/150x150/e5e7eb/6b7280?text=Item`
   }
 }
