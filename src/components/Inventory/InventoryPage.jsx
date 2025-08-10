@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useInventory } from '../../store/InventoryContext'
 import InventoryGrid from './InventoryGrid'
 import { Plus, Camera } from 'lucide-react'
@@ -23,9 +24,9 @@ export default function InventoryPage() {
           </div>
           <h2 className="text-xl font-semibold text-gray-600 mb-2">No items yet</h2>
           <p className="text-gray-500 mb-6">Scan a receipt to get started</p>
-          <a href="/camera" className="btn-primary">
+          <Link to="/camera" className="btn-primary">
             Scan Receipt
-          </a>
+          </Link>
         </div>
       ) : (
         <InventoryGrid items={state.items} />

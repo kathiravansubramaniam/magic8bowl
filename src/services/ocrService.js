@@ -1,11 +1,12 @@
 import { createWorker } from 'tesseract.js'
 
 export async function processReceipt(imageFile) {
-  const worker = await createWorker()
+  let worker;
   
   try {
-    await worker.loadLanguage('eng')
-    await worker.initialize('eng')
+    worker = await createWorker('eng', 1, {
+      logger: m => console.log(m)
+    })
     
     const { data } = await worker.recognize(imageFile)
     
@@ -13,7 +14,12 @@ export async function processReceipt(imageFile) {
       text: data.text,
       confidence: data.confidence
     }
+  } catch (error) {
+    console.error('OCR processing failed:', error)
+    throw new Error('Failed to process receipt image. Please try again with a clearer photo.')
   } finally {
-    await worker.terminate()
+    if (worker) {
+      await worker.terminate()
+    }
   }
 }
