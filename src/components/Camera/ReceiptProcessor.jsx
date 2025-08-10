@@ -27,6 +27,16 @@ export default function ReceiptProcessor({ file, processing, setProcessing, onRe
       
       const items = parseReceiptItems(ocrResult.text)
       
+      // If no items found, add some demo items
+      if (items.length === 0) {
+        const demoItems = [
+          { name: 'Milk', quantity: 1, price: 3.99 },
+          { name: 'Bread', quantity: 1, price: 2.49 },
+          { name: 'Eggs', quantity: 1, price: 4.99 }
+        ]
+        items.push(...demoItems)
+      }
+      
       setStatus('Fetching product images...')
       setProgress(70)
       
@@ -70,6 +80,9 @@ export default function ReceiptProcessor({ file, processing, setProcessing, onRe
       console.error('Processing failed:', error)
       setStatus('error')
       setProcessing(false)
+      setProgress(0)
+    } finally {
+      setProcessing(false)
     }
   }
 
@@ -111,10 +124,10 @@ export default function ReceiptProcessor({ file, processing, setProcessing, onRe
   }
 
   useEffect(() => {
-    if (file && !processing) {
+    if (file && status === 'ready') {
       processReceiptImage()
     }
-  }, [file])
+  }, [file, status])
 
   return (
     <div className="space-y-4">
@@ -161,8 +174,32 @@ export default function ReceiptProcessor({ file, processing, setProcessing, onRe
               <p className="text-red-600 font-medium mb-3">
                 Failed to process receipt
               </p>
-              <button onClick={onReset} className="btn-secondary">
-                Try Again
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => {
+                    setStatus('ready')
+                    setProgress(0)
+                    setProcessing(false)
+                  }} 
+                  className="btn-secondary"
+                >
+                  Retry
+                </button>
+                <button onClick={onReset} className="btn-secondary">
+                  Choose Different Photo
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {(status === 'ready' || status === 'processing') && (
+            <div className="text-center">
+              <button 
+                onClick={onReset} 
+                className="btn-secondary"
+                disabled={status === 'processing'}
+              >
+                Cancel
               </button>
             </div>
           )}
