@@ -1,0 +1,36 @@
+{
+  "name": "magic8bowl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kathiravansubramaniam/magic8bowl.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kathiravansubramaniam/magic8bowl/issues"
+  },
+  "homepage": "https://github.com/kathiravansubramaniam/magic8bowl#readme",
+  "dependencies": {
+    "@headlessui/react": "^2.2.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.4.21",
+    "lucide-react": "^0.539.0",
+    "postcss": "^8.5.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.8.0",
+    "tailwindcss": "^4.1.11",
+    "tesseract.js": "^6.0.1",
+    "vite": "^7.1.1"
+  }
+}
