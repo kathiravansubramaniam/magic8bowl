@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useInventory } from '../../store/InventoryContext'
 import { processReceipt } from '../../services/ocrService'
-import { fetchItemImage } from '../../services/imageService'
+import { getItemEmoji } from '../../utils/emojiMapper'
 import { Loader2, CheckCircle, XCircle } from 'lucide-react'
 
 export default function ReceiptProcessor({ file, processing, setProcessing, onReset }) {
@@ -27,47 +27,26 @@ export default function ReceiptProcessor({ file, processing, setProcessing, onRe
       
       const items = parseReceiptItems(ocrResult.text)
       
-      // If no items found, add some demo items
+      // If no items found, throw error
       if (items.length === 0) {
-        const demoItems = [
-          { name: 'Milk', quantity: 1, price: 3.99 },
-          { name: 'Bread', quantity: 1, price: 2.49 },
-          { name: 'Eggs', quantity: 1, price: 4.99 }
-        ]
-        items.push(...demoItems)
+        throw new Error('No grocery items found in receipt. Please ensure the receipt is clear and contains grocery items.')
       }
       
-      setStatus('Fetching product images...')
+      setStatus('Adding items to inventory...')
       setProgress(70)
       
-      const itemsWithImages = await Promise.all(
-        items.map(async (item, index) => {
-          try {
-            const image = await fetchItemImage(item.name)
-            return {
-              ...item,
-              id: Date.now() + index,
-              image,
-              originalQuantity: item.quantity,
-              expiryDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString()
-            }
-          } catch (error) {
-            console.error('Image fetch failed for item:', item.name, error)
-            return {
-              ...item,
-              id: Date.now() + index,
-              image: `https://via.placeholder.com/150x150/e5e7eb/6b7280?text=${encodeURIComponent(item.name.slice(0, 8))}`,
-              originalQuantity: item.quantity,
-              expiryDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString()
-            }
-          }
-        })
-      )
+      const itemsWithEmojis = items.map((item, index) => ({
+        ...item,
+        id: Date.now() + index,
+        emoji: getItemEmoji(item.name),
+        originalQuantity: item.quantity,
+        expiryDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString()
+      }))
       
       setProgress(90)
-      setExtractedItems(itemsWithImages)
+      setExtractedItems(itemsWithEmojis)
       
-      dispatch({ type: 'ADD_ITEMS', payload: itemsWithImages })
+      dispatch({ type: 'ADD_ITEMS', payload: itemsWithEmojis })
       
       setStatus('complete')
       setProgress(100)
@@ -78,7 +57,7 @@ export default function ReceiptProcessor({ file, processing, setProcessing, onRe
       
     } catch (error) {
       console.error('Processing failed:', error)
-      setStatus('error')
+      setStatus(`error: ${error.message}`)
       setProcessing(false)
       setProgress(0)
     } finally {
@@ -169,10 +148,10 @@ export default function ReceiptProcessor({ file, processing, setProcessing, onRe
             </div>
           )}
           
-          {status === 'error' && (
+          {status.startsWith('error:') && (
             <div className="text-center">
               <p className="text-red-600 font-medium mb-3">
-                Failed to process receipt
+                {status.replace('error: ', '')}
               </p>
               <div className="flex gap-2">
                 <button 

@@ -33,14 +33,9 @@ export default function InventoryItem({ item }) {
     <>
       <div className="card p-3">
         <div className="relative">
-          <img
-            src={item.image || `https://via.placeholder.com/150x150/e5e7eb/6b7280?text=${encodeURIComponent(item.name.slice(0, 8))}`}
-            alt={item.name}
-            className="w-full h-32 object-cover rounded-lg mb-3"
-            onError={(e) => {
-              e.target.src = `https://via.placeholder.com/150x150/e5e7eb/6b7280?text=${encodeURIComponent(item.name.slice(0, 8))}`
-            }}
-          />
+          <div className="w-full h-32 bg-gray-50 rounded-lg mb-3 flex items-center justify-center">
+            <span className="text-6xl">{item.emoji || '🛒'}</span>
+          </div>
           <button
             onClick={handleRemove}
             className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
