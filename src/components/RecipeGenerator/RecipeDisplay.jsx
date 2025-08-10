@@ -1,8 +1,8 @@
 import React from 'react'
 import { useInventory } from '../../store/InventoryContext'
-import { Bookmark, RefreshCw, Clock, Users } from 'lucide-react'
+import { Bookmark, RefreshCw, Clock, Users, ArrowLeft, Star } from 'lucide-react'
 
-export default function RecipeDisplay({ recipe, onGenerateNew }) {
+export default function RecipeDisplay({ recipe, onBack, onGenerateNew }) {
   const { dispatch } = useInventory()
 
   const handleBookmark = () => {
@@ -35,8 +35,17 @@ export default function RecipeDisplay({ recipe, onGenerateNew }) {
           </div>
           <div className="flex items-center gap-1">
             <Users size={16} />
-            <span>{recipe.servings} servings</span>
+            <span>{recipe.servings}</span>
           </div>
+          <div className="flex items-center gap-1">
+            <Star size={16} />
+            <span>{recipe.difficulty}</span>
+          </div>
+          {recipe.style && (
+            <span className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded text-xs">
+              {recipe.style}
+            </span>
+          )}
         </div>
         
         <p className="text-gray-700 mb-4">{recipe.description}</p>
@@ -69,6 +78,15 @@ export default function RecipeDisplay({ recipe, onGenerateNew }) {
       </div>
 
       <div className="flex gap-3">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="flex-1 btn-secondary flex items-center justify-center gap-2"
+          >
+            <ArrowLeft size={20} />
+            Back to Options
+          </button>
+        )}
         <button
           onClick={onGenerateNew}
           className="flex-1 btn-secondary flex items-center justify-center gap-2"
