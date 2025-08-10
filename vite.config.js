@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  base: '/magic8bowl/',
   server: {
     host: 'localhost',
     port: 3000
