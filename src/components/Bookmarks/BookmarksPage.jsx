@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useInventory } from '../../store/InventoryContext'
 import { Bookmark, Trash2, Clock, Users } from 'lucide-react'
 
@@ -20,9 +21,9 @@ export default function BookmarksPage() {
           </div>
           <h2 className="text-xl font-semibold text-gray-600 mb-2">No saved recipes</h2>
           <p className="text-gray-500 mb-6">Generate and bookmark recipes to see them here</p>
-          <a href="/recipes" className="btn-primary">
+          <Link to="/recipes" className="btn-primary">
             Generate Recipe
-          </a>
+          </Link>
         </div>
       ) : (
         <div className="space-y-4">

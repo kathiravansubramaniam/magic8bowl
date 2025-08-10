@@ -4,7 +4,7 @@ export async function processReceipt(imageFile) {
   let worker;
   
   try {
-    worker = await createWorker('eng', 1, {
+    worker = await createWorker('eng', {
       logger: m => console.log(m)
     })
     

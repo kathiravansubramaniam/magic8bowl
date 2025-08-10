@@ -1,17 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useInventory } from '../../store/InventoryContext'
 import InventoryGrid from './InventoryGrid'
+import AddItemModal from './AddItemModal'
 import { Plus, Camera } from 'lucide-react'
 
 export default function InventoryPage() {
   const { state } = useInventory()
+  const [showAddModal, setShowAddModal] = useState(false)
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Your Inventory</h1>
-        <button className="btn-primary flex items-center gap-2">
+        <button 
+          onClick={() => setShowAddModal(true)}
+          className="btn-primary flex items-center gap-2"
+        >
           <Plus size={20} />
           Add Item
         </button>
@@ -30,6 +35,10 @@ export default function InventoryPage() {
         </div>
       ) : (
         <InventoryGrid items={state.items} />
+      )}
+      
+      {showAddModal && (
+        <AddItemModal onClose={() => setShowAddModal(false)} />
       )}
     </div>
   )
