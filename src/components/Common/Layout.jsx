@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { Home, Camera, ChefHat, Bookmark } from 'lucide-react'
+import { Home, ChefHat, Bookmark } from 'lucide-react'
 
 export default function Layout({ children }) {
   return (
@@ -21,18 +21,6 @@ export default function Layout({ children }) {
           >
             <Home size={24} />
             <span className="text-xs mt-1">Inventory</span>
-          </NavLink>
-          
-          <NavLink
-            to="/camera"
-            className={({ isActive }) =>
-              `flex flex-col items-center p-2 rounded-lg ${
-                isActive ? 'text-emerald-600 bg-emerald-50' : 'text-gray-600'
-              }`
-            }
-          >
-            <Camera size={24} />
-            <span className="text-xs mt-1">Scan</span>
           </NavLink>
           
           <NavLink

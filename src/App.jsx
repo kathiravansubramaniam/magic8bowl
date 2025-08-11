@@ -3,7 +3,6 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import { InventoryProvider } from './store/InventoryContext'
 import Layout from './components/Common/Layout'
 import InventoryPage from './components/Inventory/InventoryPage'
-import CameraPage from './components/Camera/CameraPage'
 import RecipePage from './components/RecipeGenerator/RecipePage'
 import BookmarksPage from './components/Bookmarks/BookmarksPage'
 
@@ -14,7 +13,6 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<InventoryPage />} />
-            <Route path="/camera" element={<CameraPage />} />
             <Route path="/recipes" element={<RecipePage />} />
             <Route path="/bookmarks" element={<BookmarksPage />} />
           </Routes>
