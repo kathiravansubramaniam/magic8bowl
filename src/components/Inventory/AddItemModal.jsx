@@ -1,21 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useInventory } from '../../store/InventoryContext'
 import { getItemEmoji } from '../../utils/emojiMapper'
-import { X } from 'lucide-react'
+import { getRecommendedUnits, allUnits, getUnitLabel } from '../../utils/unitMapper'
+import { X, ChevronDown } from 'lucide-react'
 
 export default function AddItemModal({ onClose }) {
   const [itemName, setItemName] = useState('')
-  const [quantity, setQuantity] = useState(1)
+  const [quantity, setQuantity] = useState('')
+  const [unit, setUnit] = useState('pieces')
+  const [showAllUnits, setShowAllUnits] = useState(false)
+  const [recommendedUnits, setRecommendedUnits] = useState(['pieces', 'grams', 'ml'])
   const { dispatch } = useInventory()
 
+  // Update recommended units when item name changes
+  useEffect(() => {
+    if (itemName.trim()) {
+      const recommended = getRecommendedUnits(itemName)
+      setRecommendedUnits(recommended)
+      setUnit(recommended[0]) // Set first recommended unit as default
+    }
+  }, [itemName])
+
   const handleAdd = () => {
-    if (!itemName.trim()) return
+    if (!itemName.trim() || !quantity) return
+
+    const numQuantity = parseFloat(quantity)
+    if (numQuantity <= 0) return
 
     const newItem = {
       id: Date.now(),
       name: itemName.trim(),
-      quantity: quantity,
-      originalQuantity: quantity,
+      quantity: numQuantity,
+      unit: unit,
+      originalQuantity: numQuantity,
       emoji: getItemEmoji(itemName),
       price: 0,
       expiryDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString()
@@ -53,13 +70,47 @@ export default function AddItemModal({ onClose }) {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Quantity
             </label>
-            <input
-              type="number"
-              value={quantity}
-              onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-              min="1"
-              className="w-full p-3 border border-gray-300 rounded-lg"
-            />
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                min="0.1"
+                step="0.1"
+                placeholder="e.g. 2, 1.5, 500"
+                className="flex-1 p-3 border border-gray-300 rounded-lg"
+              />
+              <div className="relative">
+                <select
+                  value={unit}
+                  onChange={(e) => setUnit(e.target.value)}
+                  className="p-3 border border-gray-300 rounded-lg bg-white min-w-20"
+                >
+                  <optgroup label="Recommended">
+                    {recommendedUnits.map(unitValue => {
+                      const unitObj = allUnits.find(u => u.value === unitValue)
+                      return (
+                        <option key={unitValue} value={unitValue}>
+                          {unitObj ? unitObj.label : unitValue}
+                        </option>
+                      )
+                    })}
+                  </optgroup>
+                  <optgroup label="All Units">
+                    {allUnits.filter(u => !recommendedUnits.includes(u.value)).map(unitObj => (
+                      <option key={unitObj.value} value={unitObj.value}>
+                        {unitObj.label}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+            {itemName && (
+              <p className="text-xs text-gray-500 mt-1">
+                Recommended for {itemName.toLowerCase()}: {recommendedUnits.map(u => getUnitLabel(u)).join(', ')}
+              </p>
+            )}
           </div>
           
           {itemName && (
@@ -76,7 +127,7 @@ export default function AddItemModal({ onClose }) {
           </button>
           <button 
             onClick={handleAdd} 
-            disabled={!itemName.trim()}
+            disabled={!itemName.trim() || !quantity || parseFloat(quantity) <= 0}
             className="flex-1 btn-primary disabled:opacity-50"
           >
             Add Item

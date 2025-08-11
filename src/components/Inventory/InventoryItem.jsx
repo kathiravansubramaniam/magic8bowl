@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useInventory } from '../../store/InventoryContext'
+import { getUnitLabel } from '../../utils/unitMapper'
 import { Trash2, Minus, Plus, Calendar } from 'lucide-react'
 import ConsumptionModal from './ConsumptionModal'
 
@@ -47,7 +48,9 @@ export default function InventoryItem({ item }) {
         <h3 className="font-semibold text-gray-900 mb-1 truncate">{item.name}</h3>
         
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-600">Qty: {item.quantity}</span>
+          <span className="text-sm text-gray-600">
+            {item.quantity} {getUnitLabel(item.unit || 'pieces')}
+          </span>
           <span className={`text-xs px-2 py-1 rounded-full ${getExpiryColor()}`}>
             {daysToExpiry < 0 ? 'Expired' : `${daysToExpiry}d left`}
           </span>

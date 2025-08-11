@@ -1,4 +1,5 @@
 import React from 'react'
+import { getUnitLabel } from '../../utils/unitMapper'
 
 export default function ConsumptionModal({ item, onConsume, onClose }) {
   const presetAmounts = [
@@ -18,7 +19,9 @@ export default function ConsumptionModal({ item, onConsume, onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-sm">
         <h3 className="text-lg font-semibold mb-4">Use {item.name}</h3>
-        <p className="text-gray-600 mb-4">Current quantity: {item.quantity}</p>
+        <p className="text-gray-600 mb-4">
+          Current: {item.quantity} {getUnitLabel(item.unit || 'pieces')}
+        </p>
         
         <div className="grid grid-cols-2 gap-2 mb-4">
           {presetAmounts.map(preset => (
