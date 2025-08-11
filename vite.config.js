@@ -9,6 +9,14 @@ export default defineConfig({
     port: 3000
   },
   build: {
-    outDir: 'dist'
+    outDir: 'dist',
+    rollupOptions: {
+      output: {
+        // Force new hashes to bust GitHub Pages cache
+        entryFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
+        chunkFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
+        assetFileNames: `assets/[name]-[hash]-${Date.now()}.[ext]`
+      }
+    }
   }
 })
