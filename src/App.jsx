@@ -7,6 +7,8 @@ import RecipePage from './components/RecipeGenerator/RecipePage'
 import BookmarksPage from './components/Bookmarks/BookmarksPage'
 
 function App() {
+  console.log('App component loading...')
+  
   return (
     <InventoryProvider>
       <Router>
