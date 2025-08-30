@@ -37,12 +37,27 @@ export default function InventoryItem({ item }) {
           <div className="w-full h-32 bg-gray-50 rounded-lg mb-3 flex items-center justify-center">
             <span className="text-6xl">{item.emoji || '🛒'}</span>
           </div>
-          <button
-            onClick={handleRemove}
-            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
-          >
-            <Trash2 size={16} />
-          </button>
+          <div className="absolute top-2 right-2 flex gap-1">
+            <button
+              onClick={() => {
+                const newItem = {
+                  ...item,
+                  id: Date.now(),
+                  quantity: item.originalQuantity
+                }
+                dispatch({ type: 'ADD_ITEMS', payload: [newItem] })
+              }}
+              className="p-1 bg-teal-500 text-white rounded-full hover:bg-teal-600"
+            >
+              <Plus size={16} />
+            </button>
+            <button
+              onClick={handleRemove}
+              className="p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
         </div>
         
         <h3 className="font-semibold text-gray-900 mb-1 truncate">{item.name}</h3>
