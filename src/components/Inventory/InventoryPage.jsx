@@ -9,9 +9,9 @@ export default function InventoryPage() {
   const [showAddModal, setShowAddModal] = useState(false)
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Your Inventory</h1>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-white drop-shadow-lg">Your Inventory</h1>
         <button 
           onClick={() => setShowAddModal(true)}
           className="btn-primary flex items-center gap-2"
@@ -22,12 +22,12 @@ export default function InventoryPage() {
       </div>
       
       {state.items.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-gray-400 mb-4">
-            <ShoppingBag size={64} className="mx-auto" />
+        <div className="glass-card p-12 text-center">
+          <div className="text-white/60 mb-6">
+            <ShoppingBag size={80} className="mx-auto" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-600 mb-2">No items yet</h2>
-          <p className="text-gray-500 mb-6">Add some grocery items to get started</p>
+          <h2 className="text-2xl font-bold text-white mb-3">No items yet</h2>
+          <p className="text-white/80 mb-8 text-lg">Add some grocery items to get started</p>
           <button 
             onClick={() => setShowAddModal(true)}
             className="btn-primary"
