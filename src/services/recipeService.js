@@ -24,7 +24,13 @@ Format as JSON array:
     "difficulty": "Easy",
     "style": "Sheet Pan/One-Pot/Stir-fry",
     "ingredients": ["specific amount + ingredient"],
-    "instructions": ["step 1", "step 2"]
+    "instructions": ["step 1", "step 2"],
+    "nutrition": {
+      "calories": 450,
+      "protein": "25g",
+      "fat": "15g",
+      "carbs": "35g"
+    }
   },
   {
     "title": "Different Recipe Name",
@@ -75,7 +81,13 @@ Give me 2 completely different recipe options.`
           difficulty: "Easy",
           style: "Stir-fry",
           ingredients: ["2 tbsp olive oil", "Mixed vegetables from your inventory", "Salt and pepper to taste"],
-          instructions: ["Heat oil in pan", "Add vegetables", "Cook 5-7 minutes until tender", "Season with salt and pepper"]
+          instructions: ["Heat oil in pan", "Add vegetables", "Cook 5-7 minutes until tender", "Season with salt and pepper"],
+          nutrition: {
+            calories: 180,
+            protein: "4g",
+            fat: "12g", 
+            carbs: "15g"
+          }
         }
       ]
     }

@@ -8,7 +8,7 @@ const MovingCarousel = () => {
   const items = ['🍎', '🥕', '🥛', '🍞', '🧀', '🥩', '🥬', '🍅', '🧄', '🧅']
   
   return (
-    <div className="overflow-hidden py-8">
+    <div className="w-full overflow-hidden py-8">
       <div className="animate-scroll flex gap-8 whitespace-nowrap">
         {[...items, ...items].map((emoji, index) => (
           <div key={index} className="flex-shrink-0 w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
@@ -20,9 +20,38 @@ const MovingCarousel = () => {
   )
 }
 
+const DeletedItem = ({ item, onReAdd }) => {
+  return (
+    <div className="bg-white rounded-lg p-3 flex items-center gap-3">
+      <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+        <span className="text-2xl">{item.emoji || '🛒'}</span>
+      </div>
+      <div className="flex-1 min-w-0">
+        <h3 className="font-medium text-gray-900 truncate">{item.name}</h3>
+        <p className="text-sm text-gray-500">{item.originalQuantity} {item.unit}</p>
+      </div>
+      <button
+        onClick={() => onReAdd(item)}
+        className="p-2 bg-teal-500 text-white rounded-full hover:bg-teal-600"
+      >
+        <Plus size={16} />
+      </button>
+    </div>
+  )
+}
+
 export default function InventoryPage() {
-  const { state } = useInventory()
+  const { state, dispatch } = useInventory()
   const [showAddForm, setShowAddForm] = useState(false)
+
+  const handleReAddItem = (item) => {
+    const newItem = {
+      ...item,
+      id: Date.now(),
+      quantity: item.originalQuantity
+    }
+    dispatch({ type: 'ADD_ITEMS', payload: [newItem] })
+  }
 
   if (showAddForm) {
     return <AddItemCard onClose={() => setShowAddForm(false)} />
@@ -71,6 +100,17 @@ export default function InventoryPage() {
           <div className="bg-gray-100 min-h-screen p-4">
             <h2 className="text-sm font-medium text-gray-600 mb-4 uppercase tracking-wide">Current Inventory</h2>
             <InventoryGrid items={state.items} />
+            
+            {state.deletedItems.length > 0 && (
+              <div className="mt-8">
+                <h2 className="text-sm font-medium text-gray-600 mb-4 uppercase tracking-wide">Previously Added</h2>
+                <div className="space-y-3">
+                  {state.deletedItems.map(item => (
+                    <DeletedItem key={`deleted-${item.id}`} item={item} onReAdd={handleReAddItem} />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

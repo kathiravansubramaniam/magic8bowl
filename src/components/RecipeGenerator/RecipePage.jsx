@@ -21,6 +21,10 @@ export default function RecipePage() {
   })
   const [activeTab, setActiveTab] = useState('generated')
   const [apiKey, setApiKey] = useState(() => localStorage.getItem('openai-api-key') || '')
+  const [recipeImages, setRecipeImages] = useState(() => {
+    const saved = localStorage.getItem('recipe-images')
+    return saved ? JSON.parse(saved) : {}
+  })
 
   const handleGenerateRecipe = async (selectedCondiments) => {
     if (!apiKey) {
@@ -41,11 +45,43 @@ export default function RecipePage() {
       setRecipes(generatedRecipes)
       localStorage.setItem('generated-recipes', JSON.stringify(generatedRecipes))
       setSelectedRecipe(null)
+      
+      // Generate images for each recipe
+      generatedRecipes.forEach(recipe => generateRecipeImage(recipe.title))
     } catch (error) {
       alert('Failed to generate recipe. Please check your API key.')
       setShowCondimentSelector(true)
     }
     setLoading(false)
+  }
+
+  const generateRecipeImage = async (recipeTitle) => {
+    if (!apiKey || recipeImages[recipeTitle]) return
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/images/generations', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: "dall-e-3",
+          prompt: `A beautiful, appetizing photo of ${recipeTitle}. The dish should be photographed from above, cropped tightly to show only the food with no background visible. Professional food photography, vibrant colors, high quality, restaurant presentation. Remove any background, plates, or table - show only the prepared food itself.`,
+          n: 1,
+          size: "1024x1024"
+        }),
+      })
+
+      const data = await response.json()
+      if (data.data && data.data[0]) {
+        const newImages = { ...recipeImages, [recipeTitle]: data.data[0].url }
+        setRecipeImages(newImages)
+        localStorage.setItem('recipe-images', JSON.stringify(newImages))
+      }
+    } catch (error) {
+      console.error('Error generating recipe image:', error)
+    }
   }
 
   const handleSaveApiKey = (key) => {
@@ -138,8 +174,16 @@ export default function RecipePage() {
               <div key={index} className="recipe-card p-4 cursor-pointer"
                    onClick={() => setSelectedRecipe(recipe)}>
                 <div className="flex gap-4">
-                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-2xl">🍽️</span>
+                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {recipeImages[recipe.title] ? (
+                      <img 
+                        src={recipeImages[recipe.title]} 
+                        alt={recipe.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-2xl">🍽️</span>
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 truncate mb-1">{recipe.title}</h3>
@@ -150,6 +194,12 @@ export default function RecipePage() {
                       <span className="text-xs text-gray-500">{recipe.difficulty}</span>
                       <span className="text-xs text-gray-400">•</span>
                       <span className="text-xs text-gray-500">{recipe.cookTime}</span>
+                      {recipe.nutrition && (
+                        <>
+                          <span className="text-xs text-gray-400">•</span>
+                          <span className="text-xs text-gray-500">{recipe.nutrition.calories} kcal</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -182,8 +232,16 @@ export default function RecipePage() {
               <div key={recipe.id} className="recipe-card p-4 cursor-pointer"
                    onClick={() => setSelectedRecipe(recipe)}>
                 <div className="flex gap-4">
-                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-2xl">🍽️</span>
+                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {recipeImages[recipe.title] ? (
+                      <img 
+                        src={recipeImages[recipe.title]} 
+                        alt={recipe.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-2xl">🍽️</span>
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 truncate mb-1">{recipe.title}</h3>
@@ -194,6 +252,12 @@ export default function RecipePage() {
                       <span className="text-xs text-gray-500">{recipe.cookTime}</span>
                       <span className="text-xs text-gray-400">•</span>
                       <span className="text-xs text-gray-500">Saved {new Date(recipe.savedAt).toLocaleDateString()}</span>
+                      {recipe.nutrition && (
+                        <>
+                          <span className="text-xs text-gray-400">•</span>
+                          <span className="text-xs text-gray-500">{recipe.nutrition.calories} kcal</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

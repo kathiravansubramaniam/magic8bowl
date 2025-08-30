@@ -28,32 +28,34 @@ export default function BookmarksPage() {
       ) : (
         <div className="space-y-4">
           {state.bookmarkedRecipes.map(recipe => (
-            <div key={recipe.id} className="card p-4">
-              <div className="flex justify-between items-start mb-3">
-                <h3 className="text-base font-semibold text-gray-900">{recipe.title}</h3>
+            <div key={recipe.id} className="bg-white rounded-xl p-6 border border-gray-100">
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{recipe.title}</h3>
+                  <p className="text-gray-600 leading-relaxed mb-4">{recipe.description}</p>
+                  
+                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <Clock size={16} />
+                      <span>{recipe.cookTime}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Users size={16} />
+                      <span>{recipe.servings} servings</span>
+                    </div>
+                  </div>
+                  
+                  <div className="text-xs text-gray-400 mt-3">
+                    Saved {new Date(recipe.savedAt).toLocaleDateString()}
+                  </div>
+                </div>
+                
                 <button
                   onClick={() => handleRemoveBookmark(recipe.id)}
-                  className="p-1 text-red-500 hover:text-red-700"
+                  className="p-2 text-red-500 hover:text-red-700"
                 >
-                  <Trash2 size={18} />
+                  <Trash2 size={20} />
                 </button>
-              </div>
-              
-              <p className="text-gray-600 text-sm mb-3">{recipe.description}</p>
-              
-              <div className="flex gap-4 text-sm text-gray-500 mb-3">
-                <div className="flex items-center gap-1">
-                  <Clock size={14} />
-                  <span>{recipe.cookTime}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Users size={14} />
-                  <span>{recipe.servings} servings</span>
-                </div>
-              </div>
-              
-              <div className="text-xs text-gray-400">
-                Saved {new Date(recipe.savedAt).toLocaleDateString()}
               </div>
             </div>
           ))}

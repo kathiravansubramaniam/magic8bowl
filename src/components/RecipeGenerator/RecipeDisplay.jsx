@@ -93,6 +93,30 @@ export default function RecipeDisplay({ recipe, onBack, onGenerateNew }) {
             <span>•</span>
             <span>{recipe.difficulty}</span>
           </div>
+          
+          {recipe.nutrition && (
+            <div className="bg-gray-50 p-4 rounded-xl mb-4">
+              <h4 className="text-sm font-semibold text-gray-900 mb-3">Nutrition (per serving)</h4>
+              <div className="grid grid-cols-4 gap-4 text-center">
+                <div>
+                  <p className="text-lg font-bold text-gray-900">{recipe.nutrition.calories}</p>
+                  <p className="text-xs text-gray-500">kcal</p>
+                </div>
+                <div>
+                  <p className="text-lg font-bold text-gray-900">{recipe.nutrition.protein}</p>
+                  <p className="text-xs text-gray-500">Protein</p>
+                </div>
+                <div>
+                  <p className="text-lg font-bold text-gray-900">{recipe.nutrition.fat}</p>
+                  <p className="text-xs text-gray-500">Fat</p>
+                </div>
+                <div>
+                  <p className="text-lg font-bold text-gray-900">{recipe.nutrition.carbs}</p>
+                  <p className="text-xs text-gray-500">Carbs</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

@@ -15,7 +15,7 @@ export default function Layout({ children }) {
             to="/"
             className={({ isActive }) =>
               `flex flex-col items-center p-2 rounded-lg ${
-                isActive ? 'text-emerald-600 bg-emerald-50' : 'text-gray-600'
+                isActive ? 'text-teal-600 bg-teal-50' : 'text-gray-600'
               }`
             }
           >
@@ -27,7 +27,7 @@ export default function Layout({ children }) {
             to="/recipes"
             className={({ isActive }) =>
               `flex flex-col items-center p-2 rounded-lg ${
-                isActive ? 'text-emerald-600 bg-emerald-50' : 'text-gray-600'
+                isActive ? 'text-teal-600 bg-teal-50' : 'text-gray-600'
               }`
             }
           >
@@ -39,7 +39,7 @@ export default function Layout({ children }) {
             to="/bookmarks"
             className={({ isActive }) =>
               `flex flex-col items-center p-2 rounded-lg ${
-                isActive ? 'text-emerald-600 bg-emerald-50' : 'text-gray-600'
+                isActive ? 'text-teal-600 bg-teal-50' : 'text-gray-600'
               }`
             }
           >

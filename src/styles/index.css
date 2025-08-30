@@ -4,6 +4,10 @@
   html {
     font-family: system-ui, sans-serif;
   }
+  
+  body {
+    overflow-x: hidden;
+  }
 }
 
 .btn-primary {

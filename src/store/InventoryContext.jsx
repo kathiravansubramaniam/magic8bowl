@@ -4,6 +4,7 @@ const InventoryContext = createContext()
 
 const initialState = {
   items: [],
+  deletedItems: [],
   bookmarkedRecipes: []
 }
 
@@ -22,18 +23,25 @@ function inventoryReducer(state, action) {
         )
       }
     case 'REMOVE_ITEM':
+      const itemToRemove = state.items.find(item => item.id === action.payload)
       return {
         ...state,
-        items: state.items.filter(item => item.id !== action.payload)
+        items: state.items.filter(item => item.id !== action.payload),
+        deletedItems: itemToRemove ? [...state.deletedItems, itemToRemove] : state.deletedItems
       }
     case 'CONSUME_ITEM':
+      const updatedItems = state.items.map(item =>
+        item.id === action.payload.id
+          ? { ...item, quantity: Math.max(0, item.quantity - action.payload.amount) }
+          : item
+      )
+      const consumedItems = updatedItems.filter(item => item.quantity === 0)
+      const activeItems = updatedItems.filter(item => item.quantity > 0)
+      
       return {
         ...state,
-        items: state.items.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: Math.max(0, item.quantity - action.payload.amount) }
-            : item
-        ).filter(item => item.quantity > 0)
+        items: activeItems,
+        deletedItems: [...state.deletedItems, ...consumedItems]
       }
     case 'ADD_BOOKMARK':
       return {
