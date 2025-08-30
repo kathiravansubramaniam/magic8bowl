@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useInventory } from '../../store/InventoryContext'
-import { ChefHat, Settings, Loader2 } from 'lucide-react'
+import { ChefHat, Settings, Loader2, ArrowLeft, Bookmark } from 'lucide-react'
 import { generateRecipe } from '../../services/recipeService'
 import RecipeDisplay from './RecipeDisplay'
 import CondimentSelector from './CondimentSelector'
@@ -13,6 +13,7 @@ export default function RecipePage() {
   const [loading, setLoading] = useState(false)
   const [showApiKeyModal, setShowApiKeyModal] = useState(false)
   const [showCondimentSelector, setShowCondimentSelector] = useState(true)
+  const [activeTab, setActiveTab] = useState('generated')
   const [apiKey, setApiKey] = useState(() => localStorage.getItem('openai-api-key') || '')
 
   const handleGenerateRecipe = async (selectedCondiments) => {
@@ -28,6 +29,7 @@ export default function RecipePage() {
 
     setLoading(true)
     setShowCondimentSelector(false)
+    setActiveTab('generated')
     try {
       const generatedRecipes = await generateRecipe(state.items, selectedCondiments, apiKey)
       setRecipes(generatedRecipes)
@@ -45,21 +47,76 @@ export default function RecipePage() {
     setShowApiKeyModal(false)
   }
 
+  if (selectedRecipe) {
+    return (
+      <RecipeDisplay
+        recipe={selectedRecipe}
+        onBack={() => setSelectedRecipe(null)}
+        onGenerateNew={() => {
+          setRecipes(null)
+          setSelectedRecipe(null)
+          setShowCondimentSelector(true)
+        }}
+      />
+    )
+  }
+
+  if (showCondimentSelector) {
+    return (
+      <CondimentSelector
+        availableItems={state.items}
+        onGenerate={handleGenerateRecipe}
+      />
+    )
+  }
+
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Recipe Generator</h1>
-        <button
-          onClick={() => setShowApiKeyModal(true)}
+      <div className="flex items-center gap-4 mb-6">
+        <button 
+          onClick={() => setShowCondimentSelector(true)}
           className="p-2 text-gray-600 hover:text-gray-800"
         >
-          <Settings size={24} />
+          <ArrowLeft size={24} />
+        </button>
+        <h1 className="text-2xl font-bold text-gray-900">Recipes</h1>
+        <div className="ml-auto">
+          <button
+            onClick={() => setShowApiKeyModal(true)}
+            className="p-2 text-gray-600 hover:text-gray-800"
+          >
+            <Settings size={24} />
+          </button>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex mb-6">
+        <button
+          onClick={() => setActiveTab('generated')}
+          className={`flex-1 pb-4 text-center font-medium border-b-2 transition-colors ${
+            activeTab === 'generated' 
+              ? 'text-gray-900 border-gray-900' 
+              : 'text-gray-500 border-transparent'
+          }`}
+        >
+          GENERATED RECIPES
+        </button>
+        <button
+          onClick={() => setActiveTab('bookmarked')}
+          className={`flex-1 pb-4 text-center font-medium border-b-2 transition-colors ${
+            activeTab === 'bookmarked' 
+              ? 'text-gray-900 border-gray-900' 
+              : 'text-gray-500 border-transparent'
+          }`}
+        >
+          BOOKMARKED
         </button>
       </div>
 
       {loading ? (
-        <div className="card p-6 text-center">
-          <Loader2 className="animate-spin text-emerald-500 mx-auto mb-4" size={48} />
+        <div className="text-center py-12">
+          <Loader2 className="animate-spin text-gray-500 mx-auto mb-4" size={48} />
           <h2 className="text-lg font-semibold text-gray-700 mb-2">
             Generating Recipe Options...
           </h2>
@@ -67,59 +124,77 @@ export default function RecipePage() {
             Creating delicious recipes from your ingredients
           </p>
         </div>
-      ) : selectedRecipe ? (
-        <RecipeDisplay
-          recipe={selectedRecipe}
-          onBack={() => setSelectedRecipe(null)}
-          onGenerateNew={() => {
-            setRecipes(null)
-            setSelectedRecipe(null)
-            setShowCondimentSelector(true)
-          }}
-        />
-      ) : recipes ? (
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-900">Recipe Options</h2>
+      ) : activeTab === 'generated' ? (
+        recipes ? (
+          <div className="space-y-4">
+            {recipes.map((recipe, index) => (
+              <div key={index} className="recipe-card p-4 cursor-pointer"
+                   onClick={() => setSelectedRecipe(recipe)}>
+                <div className="flex gap-4">
+                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl">🍽️</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-start mb-1">
+                      <h3 className="font-semibold text-gray-900 truncate">{recipe.title}</h3>
+                      <span className="text-xs text-gray-500 ml-2">{recipe.cookTime}</span>
+                    </div>
+                    <p className="text-sm text-gray-600 line-clamp-2">{recipe.description}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-xs text-gray-500">{recipe.servings}</span>
+                      <span className="text-xs text-gray-400">•</span>
+                      <span className="text-xs text-gray-500">{recipe.difficulty}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <ChefHat size={64} className="mx-auto text-gray-400 mb-4" />
+            <h2 className="text-lg font-semibold text-gray-700 mb-2">No recipes generated yet</h2>
+            <p className="text-gray-500 mb-6">Generate some recipes to see them here</p>
             <button
-              onClick={() => {
-                setRecipes(null)
-                setShowCondimentSelector(true)
-              }}
-              className="btn-secondary"
+              onClick={() => setShowCondimentSelector(true)}
+              className="btn-primary"
             >
-              Generate New
+              Generate Recipes
             </button>
           </div>
-          
-          {recipes.map((recipe, index) => (
-            <div key={index} className="card p-4 cursor-pointer hover:shadow-lg transition-shadow"
-                 onClick={() => setSelectedRecipe(recipe)}>
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-lg font-semibold text-gray-900">{recipe.title}</h3>
-                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                  {recipe.style}
-                </span>
-              </div>
-              <p className="text-gray-600 text-sm mb-3">{recipe.description}</p>
-              <div className="flex gap-4 text-sm text-gray-500">
-                <span>⏱️ {recipe.cookTime}</span>
-                <span>👥 {recipe.servings}</span>
-                <span>📊 {recipe.difficulty}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : showCondimentSelector ? (
-        <CondimentSelector
-          availableItems={state.items}
-          onGenerate={handleGenerateRecipe}
-        />
+        )
       ) : (
-        <div className="card p-6 text-center">
-          <ChefHat size={64} className="mx-auto text-gray-400 mb-4" />
-          <h2 className="text-lg font-semibold text-gray-700 mb-2">No items in inventory</h2>
-          <p className="text-gray-500 mb-6">Add some ingredients first to generate recipes</p>
+        <div className="space-y-4">
+          {state.bookmarkedRecipes.length === 0 ? (
+            <div className="text-center py-12">
+              <Bookmark size={64} className="mx-auto text-gray-400 mb-4" />
+              <h2 className="text-lg font-semibold text-gray-700 mb-2">No bookmarked recipes</h2>
+              <p className="text-gray-500">Save recipes to see them here</p>
+            </div>
+          ) : (
+            state.bookmarkedRecipes.map(recipe => (
+              <div key={recipe.id} className="recipe-card p-4 cursor-pointer"
+                   onClick={() => setSelectedRecipe(recipe)}>
+                <div className="flex gap-4">
+                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl">🍽️</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-start mb-1">
+                      <h3 className="font-semibold text-gray-900 truncate">{recipe.title}</h3>
+                      <span className="text-xs text-gray-500 ml-2">{recipe.cookTime}</span>
+                    </div>
+                    <p className="text-sm text-gray-600 line-clamp-2">{recipe.description}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-xs text-gray-500">{recipe.servings}</span>
+                      <span className="text-xs text-gray-400">•</span>
+                      <span className="text-xs text-gray-500">Saved {new Date(recipe.savedAt).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       )}
 

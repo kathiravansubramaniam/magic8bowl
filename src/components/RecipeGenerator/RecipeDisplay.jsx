@@ -31,7 +31,7 @@ export default function RecipeDisplay({ recipe, onBack, onGenerateNew }) {
         },
         body: JSON.stringify({
           model: "dall-e-3",
-          prompt: `A beautiful, appetizing photo of ${recipe.title}. The dish should look fresh, vibrant, and professional. Food photography style, top-down view, clean white background, high quality, restaurant presentation.`,
+          prompt: `A beautiful, appetizing photo of ${recipe.title}. The dish should be photographed from above, cropped tightly to show only the food with no background visible. Professional food photography, vibrant colors, high quality, restaurant presentation. Remove any background, plates, or table - show only the prepared food itself.`,
           n: 1,
           size: "1024x1024"
         }),
@@ -57,52 +57,36 @@ export default function RecipeDisplay({ recipe, onBack, onGenerateNew }) {
         <button onClick={onBack} className="p-2 text-gray-600 hover:text-gray-800">
           <ArrowLeft size={24} />
         </button>
-        <h1 className="text-2xl font-bold text-gray-900">Recipe</h1>
       </div>
 
-      <div className="card p-0 overflow-hidden">
-        <div className="relative">
-          {/* Recipe Image */}
-          <div className="w-full h-64 bg-gray-100 flex items-center justify-center relative overflow-hidden">
-            {isGeneratingImage ? (
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600 mx-auto mb-2"></div>
-                <p className="text-gray-500 text-sm">Generating image...</p>
-              </div>
-            ) : recipeImage ? (
-              <img 
-                src={recipeImage} 
-                alt={recipe.title}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-6xl">🍽️</span>
-            )}
-          </div>
-          
-          {/* Heart bookmark button */}
-          <button
-            onClick={handleBookmark}
-            className="absolute top-4 right-4 p-3 bg-white/90 rounded-full shadow-lg hover:bg-white transition-all"
-          >
-            <Bookmark size={20} className="text-gray-600" fill="currentColor" />
-          </button>
+      <div className="text-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">{recipe.title}</h1>
+      </div>
+
+      <div className="recipe-card p-0 overflow-hidden mb-6">
+        {/* Recipe Image */}
+        <div className="w-full h-64 bg-gray-200 flex items-center justify-center relative overflow-hidden">
+          {isGeneratingImage ? (
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600 mx-auto mb-2"></div>
+              <p className="text-gray-500 text-sm">Generating image...</p>
+            </div>
+          ) : recipeImage ? (
+            <img 
+              src={recipeImage} 
+              alt={recipe.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-6xl">🍽️</span>
+          )}
         </div>
         
         <div className="p-6">
-          {/* Title and Style Badge */}
-          <div className="mb-4">
-            {recipe.style && (
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-                {recipe.style}
-              </p>
-            )}
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">{recipe.title}</h2>
-            <p className="text-gray-600 leading-relaxed">{recipe.description}</p>
-          </div>
+          <p className="text-gray-600 leading-relaxed mb-4">{recipe.description}</p>
           
           {/* Nutrition Info */}
-          <div className="flex justify-between text-sm text-gray-600 mb-6">
+          <div className="flex justify-center gap-4 text-sm text-gray-600 mb-4">
             <span>{recipe.cookTime}</span>
             <span>•</span>
             <span>{recipe.servings}</span>
@@ -112,14 +96,14 @@ export default function RecipeDisplay({ recipe, onBack, onGenerateNew }) {
         </div>
       </div>
 
-      <div className="card p-6">
+      <div className="recipe-card p-6 mb-4">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Ingredients</h3>
         <div className="text-gray-700 leading-relaxed">
           {recipe.ingredients.join(', ')}
         </div>
       </div>
 
-      <div className="card p-6">
+      <div className="recipe-card p-6 mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Instructions</h3>
         <ol className="space-y-4">
           {recipe.instructions.map((step, index) => (
@@ -133,22 +117,13 @@ export default function RecipeDisplay({ recipe, onBack, onGenerateNew }) {
         </ol>
       </div>
 
-      <div className="flex gap-3">
-        {onBack && (
-          <button
-            onClick={onBack}
-            className="flex-1 btn-secondary flex items-center justify-center gap-2"
-          >
-            <ArrowLeft size={20} />
-            Back to Options
-          </button>
-        )}
+      <div className="text-center">
         <button
-          onClick={onGenerateNew}
-          className="flex-1 btn-secondary flex items-center justify-center gap-2"
+          onClick={handleBookmark}
+          className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 px-8 rounded-2xl transition-colors duration-200 flex items-center justify-center gap-3 mx-auto"
         >
-          <RefreshCw size={20} />
-          Generate New
+          <Bookmark size={20} />
+          Bookmark Recipe
         </button>
       </div>
     </div>
