@@ -46,24 +46,24 @@ export default function RecipePage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-white drop-shadow-lg">Recipe Generator</h1>
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Recipe Generator</h1>
         <button
           onClick={() => setShowApiKeyModal(true)}
-          className="p-3 text-white/80 hover:text-white bg-white/20 rounded-xl backdrop-blur-sm transition-all duration-300"
+          className="p-2 text-gray-600 hover:text-gray-800"
         >
           <Settings size={24} />
         </button>
       </div>
 
       {loading ? (
-        <div className="glass-card p-8 text-center">
-          <Loader2 className="animate-spin text-white mx-auto mb-6" size={56} />
-          <h2 className="text-xl font-bold text-white mb-3">
+        <div className="card p-6 text-center">
+          <Loader2 className="animate-spin text-emerald-500 mx-auto mb-4" size={48} />
+          <h2 className="text-lg font-semibold text-gray-700 mb-2">
             Generating Recipe Options...
           </h2>
-          <p className="text-white/80 text-lg">
+          <p className="text-gray-500">
             Creating delicious recipes from your ingredients
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function RecipePage() {
       ) : recipes ? (
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-white drop-shadow-lg">Recipe Options</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Recipe Options</h2>
             <button
               onClick={() => {
                 setRecipes(null)
@@ -93,19 +93,19 @@ export default function RecipePage() {
           </div>
           
           {recipes.map((recipe, index) => (
-            <div key={index} className="card p-6 cursor-pointer transition-all duration-300"
+            <div key={index} className="card p-4 cursor-pointer hover:shadow-lg transition-shadow"
                  onClick={() => setSelectedRecipe(recipe)}>
-              <div className="flex justify-between items-start mb-3">
-                <h3 className="text-xl font-bold text-gray-800">{recipe.title}</h3>
-                <span className="text-xs bg-gradient-to-r from-purple-500 to-blue-600 text-white px-3 py-1 rounded-full font-medium">
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="text-lg font-semibold text-gray-900">{recipe.title}</h3>
+                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
                   {recipe.style}
                 </span>
               </div>
-              <p className="text-gray-600 mb-4 leading-relaxed">{recipe.description}</p>
-              <div className="flex gap-6 text-sm text-gray-500">
-                <span className="flex items-center gap-1">⏱️ {recipe.cookTime}</span>
-                <span className="flex items-center gap-1">👥 {recipe.servings}</span>
-                <span className="flex items-center gap-1">📊 {recipe.difficulty}</span>
+              <p className="text-gray-600 text-sm mb-3">{recipe.description}</p>
+              <div className="flex gap-4 text-sm text-gray-500">
+                <span>⏱️ {recipe.cookTime}</span>
+                <span>👥 {recipe.servings}</span>
+                <span>📊 {recipe.difficulty}</span>
               </div>
             </div>
           ))}
@@ -116,10 +116,10 @@ export default function RecipePage() {
           onGenerate={handleGenerateRecipe}
         />
       ) : (
-        <div className="glass-card p-8 text-center">
-          <ChefHat size={80} className="mx-auto text-white/60 mb-6" />
-          <h2 className="text-2xl font-bold text-white mb-3">No items in inventory</h2>
-          <p className="text-white/80 mb-6 text-lg">Add some ingredients first to generate recipes</p>
+        <div className="card p-6 text-center">
+          <ChefHat size={64} className="mx-auto text-gray-400 mb-4" />
+          <h2 className="text-lg font-semibold text-gray-700 mb-2">No items in inventory</h2>
+          <p className="text-gray-500 mb-6">Add some ingredients first to generate recipes</p>
         </div>
       )}
 

@@ -11,48 +11,48 @@ export default function BookmarksPage() {
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold text-white drop-shadow-lg mb-8">Saved Recipes</h1>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">Saved Recipes</h1>
       
       {state.bookmarkedRecipes.length === 0 ? (
-        <div className="glass-card p-12 text-center">
-          <div className="text-white/60 mb-6">
-            <Bookmark size={80} className="mx-auto" />
+        <div className="text-center py-12">
+          <div className="text-gray-400 mb-4">
+            <Bookmark size={64} className="mx-auto" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-3">No saved recipes</h2>
-          <p className="text-white/80 mb-8 text-lg">Generate and bookmark recipes to see them here</p>
+          <h2 className="text-xl font-semibold text-gray-600 mb-2">No saved recipes</h2>
+          <p className="text-gray-500 mb-6">Generate and bookmark recipes to see them here</p>
           <Link to="/recipes" className="btn-primary">
             Generate Recipe
           </Link>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {state.bookmarkedRecipes.map(recipe => (
-            <div key={recipe.id} className="card p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-xl font-bold text-gray-800">{recipe.title}</h3>
+            <div key={recipe.id} className="card p-4">
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="text-lg font-semibold text-gray-900">{recipe.title}</h3>
                 <button
                   onClick={() => handleRemoveBookmark(recipe.id)}
-                  className="p-2 text-red-500 hover:text-red-700 bg-red-50/80 rounded-xl transition-all duration-300"
+                  className="p-1 text-red-500 hover:text-red-700"
                 >
                   <Trash2 size={18} />
                 </button>
               </div>
               
-              <p className="text-gray-600 mb-4 leading-relaxed">{recipe.description}</p>
+              <p className="text-gray-600 text-sm mb-3">{recipe.description}</p>
               
-              <div className="flex gap-6 text-sm text-gray-500 mb-4">
-                <div className="flex items-center gap-2">
-                  <Clock size={16} />
+              <div className="flex gap-4 text-sm text-gray-500 mb-3">
+                <div className="flex items-center gap-1">
+                  <Clock size={14} />
                   <span>{recipe.cookTime}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Users size={16} />
+                <div className="flex items-center gap-1">
+                  <Users size={14} />
                   <span>{recipe.servings} servings</span>
                 </div>
               </div>
               
-              <div className="text-xs text-gray-400 font-medium">
+              <div className="text-xs text-gray-400">
                 Saved {new Date(recipe.savedAt).toLocaleDateString()}
               </div>
             </div>
