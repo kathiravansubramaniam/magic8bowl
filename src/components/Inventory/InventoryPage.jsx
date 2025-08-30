@@ -101,7 +101,7 @@ export default function InventoryPage() {
             <h2 className="text-sm font-medium text-gray-600 mb-4 uppercase tracking-wide">Current Inventory</h2>
             <InventoryGrid items={state.items} />
             
-            {state.deletedItems.length > 0 && (
+            {state.deletedItems && state.deletedItems.length > 0 && (
               <div className="mt-8">
                 <h2 className="text-sm font-medium text-gray-600 mb-4 uppercase tracking-wide">Previously Added</h2>
                 <div className="space-y-3">

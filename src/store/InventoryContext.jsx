@@ -54,7 +54,11 @@ function inventoryReducer(state, action) {
         bookmarkedRecipes: state.bookmarkedRecipes.filter(recipe => recipe.id !== action.payload)
       }
     case 'LOAD_STATE':
-      return action.payload
+      return {
+        ...initialState,
+        ...action.payload,
+        deletedItems: action.payload.deletedItems || []
+      }
     default:
       return state
   }
