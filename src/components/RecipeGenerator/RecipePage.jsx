@@ -79,7 +79,7 @@ export default function RecipePage() {
         >
           <ArrowLeft size={24} />
         </button>
-        <h1 className="text-2xl font-bold text-gray-900">Recipes</h1>
+        <h1 className="text-xl font-bold text-gray-900">Recipes</h1>
         <div className="ml-auto">
           <button
             onClick={() => setShowApiKeyModal(true)}
@@ -94,7 +94,7 @@ export default function RecipePage() {
       <div className="flex mb-6">
         <button
           onClick={() => setActiveTab('generated')}
-          className={`flex-1 pb-4 text-center font-medium border-b-2 transition-colors ${
+          className={`flex-1 pb-4 text-center text-sm font-medium border-b-2 transition-colors ${
             activeTab === 'generated' 
               ? 'text-gray-900 border-gray-900' 
               : 'text-gray-500 border-transparent'
@@ -104,7 +104,7 @@ export default function RecipePage() {
         </button>
         <button
           onClick={() => setActiveTab('bookmarked')}
-          className={`flex-1 pb-4 text-center font-medium border-b-2 transition-colors ${
+          className={`flex-1 pb-4 text-center text-sm font-medium border-b-2 transition-colors ${
             activeTab === 'bookmarked' 
               ? 'text-gray-900 border-gray-900' 
               : 'text-gray-500 border-transparent'
@@ -135,15 +135,14 @@ export default function RecipePage() {
                     <span className="text-2xl">🍽️</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-1">
-                      <h3 className="font-semibold text-gray-900 truncate">{recipe.title}</h3>
-                      <span className="text-xs text-gray-500 ml-2">{recipe.cookTime}</span>
-                    </div>
-                    <p className="text-sm text-gray-600 line-clamp-2">{recipe.description}</p>
-                    <div className="flex items-center gap-2 mt-2">
+                    <h3 className="font-semibold text-gray-900 truncate mb-1">{recipe.title}</h3>
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-2">{recipe.description}</p>
+                    <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-500">{recipe.servings}</span>
                       <span className="text-xs text-gray-400">•</span>
                       <span className="text-xs text-gray-500">{recipe.difficulty}</span>
+                      <span className="text-xs text-gray-400">•</span>
+                      <span className="text-xs text-gray-500">{recipe.cookTime}</span>
                     </div>
                   </div>
                 </div>
@@ -180,13 +179,12 @@ export default function RecipePage() {
                     <span className="text-2xl">🍽️</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-1">
-                      <h3 className="font-semibold text-gray-900 truncate">{recipe.title}</h3>
-                      <span className="text-xs text-gray-500 ml-2">{recipe.cookTime}</span>
-                    </div>
-                    <p className="text-sm text-gray-600 line-clamp-2">{recipe.description}</p>
-                    <div className="flex items-center gap-2 mt-2">
+                    <h3 className="font-semibold text-gray-900 truncate mb-1">{recipe.title}</h3>
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-2">{recipe.description}</p>
+                    <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-500">{recipe.servings}</span>
+                      <span className="text-xs text-gray-400">•</span>
+                      <span className="text-xs text-gray-500">{recipe.cookTime}</span>
                       <span className="text-xs text-gray-400">•</span>
                       <span className="text-xs text-gray-500">Saved {new Date(recipe.savedAt).toLocaleDateString()}</span>
                     </div>

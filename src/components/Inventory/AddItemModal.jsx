@@ -48,7 +48,7 @@ export default function AddItemCard({ onClose }) {
         <button onClick={onClose} className="p-2 text-gray-600 hover:text-gray-800">
           <X size={24} />
         </button>
-        <h1 className="text-2xl font-bold text-gray-900">Add Item</h1>
+        <h1 className="text-xl font-bold text-gray-900">Add Item</h1>
       </div>
       
       <div className="space-y-6">

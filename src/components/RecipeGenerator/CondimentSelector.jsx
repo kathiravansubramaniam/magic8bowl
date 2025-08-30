@@ -45,7 +45,7 @@ export default function CondimentSelector({ onGenerate, availableItems }) {
   return (
     <div className="p-4">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Condiments & Spices</h1>
+        <h1 className="text-xl font-bold text-gray-900 mb-2">Condiments & Spices</h1>
         <p className="text-gray-600">
           Select what you have available to get better recipe suggestions.
         </p>

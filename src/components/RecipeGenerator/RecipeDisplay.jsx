@@ -60,7 +60,7 @@ export default function RecipeDisplay({ recipe, onBack, onGenerateNew }) {
       </div>
 
       <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">{recipe.title}</h1>
+        <h1 className="text-lg font-bold text-gray-900">{recipe.title}</h1>
       </div>
 
       <div className="recipe-card p-0 overflow-hidden mb-6">
@@ -97,14 +97,14 @@ export default function RecipeDisplay({ recipe, onBack, onGenerateNew }) {
       </div>
 
       <div className="recipe-card p-6 mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Ingredients</h3>
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Ingredients</h3>
         <div className="text-gray-700 leading-relaxed">
           {recipe.ingredients.join(', ')}
         </div>
       </div>
 
       <div className="recipe-card p-6 mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Instructions</h3>
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Instructions</h3>
         <ol className="space-y-4">
           {recipe.instructions.map((step, index) => (
             <li key={index} className="flex gap-4">
