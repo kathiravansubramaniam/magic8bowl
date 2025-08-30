@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ChefHat } from 'lucide-react'
+import { ChefHat, Settings } from 'lucide-react'
 
 const commonCondiments = [
   { name: 'Salt', emoji: '🧂' },
@@ -20,7 +20,7 @@ const commonCondiments = [
   { name: 'Hot Sauce', emoji: '🌶️' }
 ]
 
-export default function CondimentSelector({ onGenerate, availableItems }) {
+export default function CondimentSelector({ onGenerate, availableItems, onShowApiKeyModal }) {
   const [selectedCondiments, setSelectedCondiments] = useState(() => {
     const saved = localStorage.getItem('selected-condiments')
     return saved ? JSON.parse(saved) : []
@@ -44,11 +44,19 @@ export default function CondimentSelector({ onGenerate, availableItems }) {
 
   return (
     <div className="p-4">
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900 mb-2">Condiments & Spices</h1>
-        <p className="text-gray-600">
-          Select what you have available to get better recipe suggestions.
-        </p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900 mb-2">Condiments & Spices</h1>
+          <p className="text-gray-600">
+            Select what you have available to get better recipe suggestions.
+          </p>
+        </div>
+        <button
+          onClick={onShowApiKeyModal}
+          className="p-2 text-gray-600 hover:text-gray-800"
+        >
+          <Settings size={24} />
+        </button>
       </div>
       
       <div className="grid grid-cols-2 gap-3 mb-8">

@@ -28,33 +28,36 @@ export default function BookmarksPage() {
       ) : (
         <div className="space-y-4">
           {state.bookmarkedRecipes.map(recipe => (
-            <div key={recipe.id} className="bg-white rounded-xl p-6 border border-gray-100">
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{recipe.title}</h3>
-                  <p className="text-gray-600 leading-relaxed mb-4">{recipe.description}</p>
-                  
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <Clock size={16} />
-                      <span>{recipe.cookTime}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Users size={16} />
-                      <span>{recipe.servings} servings</span>
-                    </div>
-                  </div>
-                  
-                  <div className="text-xs text-gray-400 mt-3">
-                    Saved {new Date(recipe.savedAt).toLocaleDateString()}
+            <div key={recipe.id} className="recipe-card p-4 cursor-pointer" onClick={() => {}}>
+              <div className="flex gap-4">
+                <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  <span className="text-2xl">🍽️</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-gray-900 truncate mb-1">{recipe.title}</h3>
+                  <p className="text-sm text-gray-600 line-clamp-2 mb-2">{recipe.description}</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-500">{recipe.servings}</span>
+                    <span className="text-xs text-gray-400">•</span>
+                    <span className="text-xs text-gray-500">{recipe.cookTime}</span>
+                    <span className="text-xs text-gray-400">•</span>
+                    <span className="text-xs text-gray-500">Saved {new Date(recipe.savedAt).toLocaleDateString()}</span>
+                    {recipe.nutrition && (
+                      <>
+                        <span className="text-xs text-gray-400">•</span>
+                        <span className="text-xs text-gray-500">{recipe.nutrition.calories} kcal</span>
+                      </>
+                    )}
                   </div>
                 </div>
-                
                 <button
-                  onClick={() => handleRemoveBookmark(recipe.id)}
-                  className="p-2 text-red-500 hover:text-red-700"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleRemoveBookmark(recipe.id)
+                  }}
+                  className="p-2 text-red-500 hover:text-red-700 flex-shrink-0"
                 >
-                  <Trash2 size={20} />
+                  <Trash2 size={16} />
                 </button>
               </div>
             </div>

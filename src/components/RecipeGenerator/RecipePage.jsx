@@ -8,17 +8,11 @@ import ApiKeyModal from './ApiKeyModal'
 
 export default function RecipePage() {
   const { state } = useInventory()
-  const [recipes, setRecipes] = useState(() => {
-    const saved = localStorage.getItem('generated-recipes')
-    return saved ? JSON.parse(saved) : null
-  })
+  const [recipes, setRecipes] = useState(null)
   const [selectedRecipe, setSelectedRecipe] = useState(null)
   const [loading, setLoading] = useState(false)
   const [showApiKeyModal, setShowApiKeyModal] = useState(false)
-  const [showCondimentSelector, setShowCondimentSelector] = useState(() => {
-    const saved = localStorage.getItem('generated-recipes')
-    return !saved
-  })
+  const [showCondimentSelector, setShowCondimentSelector] = useState(true)
   const [activeTab, setActiveTab] = useState('generated')
   const [apiKey, setApiKey] = useState(() => localStorage.getItem('openai-api-key') || '')
   const [recipeImages, setRecipeImages] = useState(() => {
@@ -43,7 +37,6 @@ export default function RecipePage() {
     try {
       const generatedRecipes = await generateRecipe(state.items, selectedCondiments, apiKey)
       setRecipes(generatedRecipes)
-      localStorage.setItem('generated-recipes', JSON.stringify(generatedRecipes))
       setSelectedRecipe(null)
       
       // Generate images for each recipe
@@ -109,6 +102,7 @@ export default function RecipePage() {
       <CondimentSelector
         availableItems={state.items}
         onGenerate={handleGenerateRecipe}
+        onShowApiKeyModal={() => setShowApiKeyModal(true)}
       />
     )
   }
